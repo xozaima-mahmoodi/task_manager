@@ -1,0 +1,16 @@
+<h1>All Tasks</h1>
+
+<% if @tasks.empty? %>
+  <p>No tasks yet. Create one!</p>
+<% else %>
+  <ul>
+    <% @tasks.each do |task| %>
+      <li>
+        <%= task.title %>
+        <% if task.completed? %>
+          (Completed)
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

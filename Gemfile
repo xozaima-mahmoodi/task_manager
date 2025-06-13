@@ -70,4 +70,6 @@ group :test do
 
   gem 'selenium-webdriver'
 
+  gem 'rails-controller-testing'
+
 end
