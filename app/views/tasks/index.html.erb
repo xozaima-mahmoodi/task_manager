@@ -1,31 +1,18 @@
-<h1>All Tasks</h1>
+<div class="w-full max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">My Tasks</h1>
+    <%= link_to "New Task", new_task_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" %>
+  </div>
 
-<%= link_to 'New Task', new_task_path %> <% if @tasks.empty? %>
-<% if @tasks.empty? %>
-  <p>No tasks yet. Create one!</p>
-<% else %>
-  <ul>
+  <div id="tasks" class="divide-y divide-gray-200">
     <% @tasks.each do |task| %>
-      <li>
-        <%= task.title %>
-        <% if task.completed? %>
-          (Completed)
-        <% end %>
-      </li>
+      <div class="py-4 flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700"><%= task.title %></h3>
+          <p class="text-sm text-gray-500"><%= task.description %></p>
+        </div>
+        <%= link_to "Show", task, class: "text-blue-500 hover:underline" %>
+      </div>
     <% end %>
-  </ul>
-<% end %>
-
-  <p>No tasks yet. Create one!</p>
-<% else %>
-  <ul>
-    <% @tasks.each do |task| %>
-      <li>
-        <%= task.title %>
-        <% if task.completed? %>
-          (Completed)
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
+  </div>
+</div>

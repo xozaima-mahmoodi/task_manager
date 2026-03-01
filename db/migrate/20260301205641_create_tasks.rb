@@ -1,8 +1,9 @@
 class CreateTasks < ActiveRecord::Migration[8.0]
   def change
-    create_table :tasks do |t|
+    create_table :tasks, force: :cascade do |t|
       t.string :title
-      t.boolean :completed, default: false
+      t.text :description
+      t.string :status
 
       t.timestamps
     end
