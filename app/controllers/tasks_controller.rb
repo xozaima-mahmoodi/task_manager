@@ -3,8 +3,27 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index
-    # Fetches only tasks belonging to the current logged-in user
-    @tasks = current_user.tasks
+    # Base collection
+    @all_user_tasks = current_user.tasks
+    
+    # Calculate stats for the dashboard
+    @total_count = @all_user_tasks.count
+    @pending_count = @all_user_tasks.where(status: 'Pending').count
+    @in_progress_count = @all_user_tasks.where(status: 'In Progress').count
+    @done_count = @all_user_tasks.where(status: 'Done').count
+
+    # Apply search and filters to the main list
+    @tasks = @all_user_tasks
+    
+    if params[:query].present?
+      @tasks = @tasks.where("title LIKE ?", "%#{params[:query]}%")
+    end
+
+    if params[:status].present? && ['Pending', 'In Progress', 'Done'].include?(params[:status])
+      @tasks = @tasks.where(status: params[:status])
+    end
+    
+    @tasks = @tasks.order(due_date: :asc)
   end
 
   # GET /tasks/1
@@ -13,7 +32,6 @@ class TasksController < ApplicationController
 
   # GET /tasks/new
   def new
-    # Builds a new task associated with the current user
     @task = current_user.tasks.build
   end
 
@@ -23,7 +41,6 @@ class TasksController < ApplicationController
 
   # POST /tasks
   def create
-    # Initializes a new task through the user relationship
     @task = current_user.tasks.build(task_params)
 
     if @task.save
@@ -48,18 +65,29 @@ class TasksController < ApplicationController
     redirect_to tasks_url, notice: "Task was successfully destroyed.", status: :see_other
   end
 
+  # PATCH /tasks/1/toggle_status
+  def toggle_status
+    @task = current_user.tasks.find(params[:id])
+    
+    next_status = case @task.status
+                  when 'Pending' then 'In Progress'
+                  when 'In Progress' then 'Done'
+                  else 'Pending'
+                  end
+
+    @task.update(status: next_status)
+    redirect_to tasks_path(status: params[:current_filter]), notice: "Status updated to #{next_status}"
+  end
+
   private
 
-  # Enhanced security for fetching tasks
   def set_task
-    # This prevents users from accessing other users' tasks by manually changing IDs in the URL
     @task = current_user.tasks.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to tasks_path, alert: "Access denied: You do not have permission to access this task."
   end
 
-  # Only allow a list of trusted parameters through
   def task_params
-    params.expect(task: [ :title, :description, :status ])
+    params.expect(task: [ :title, :description, :status, :due_date ])
   end
 end
