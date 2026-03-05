@@ -1,6 +1,5 @@
 <div class="max-w-7xl mx-auto px-4 py-8">
   
-  <%# Header Section %>
   <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
     <div>
       <h1 class="text-4xl font-black text-gray-900">My Tasks</h1>
@@ -14,7 +13,6 @@
     </div>
   </div>
 
-  <%# Stats Cards %>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
     <% [["Total Tasks", @total_count, "border-gray-200"], ["Pending", @pending_count, "border-yellow-400"], ["In Progress", @in_progress_count, "border-blue-400"], ["Completed", @done_count, "border-green-400"]].each do |label, count, border| %>
       <div class="bg-white p-6 rounded-[2rem] shadow-sm border-b-4 <%= border %>">
@@ -24,7 +22,6 @@
     <% end %>
   </div>
 
-  <%# Filters & Sorting Toolbar %>
   <div class="flex flex-col lg:flex-row justify-between items-center gap-6 mb-8">
     <div class="flex flex-wrap items-center gap-4">
       <div class="bg-white p-1 rounded-2xl shadow-sm border border-gray-100 flex">
@@ -35,7 +32,7 @@
       </div>
 
       <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-gray-100 shadow-sm">
-        <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter text-gray-400">Sort By:</span>
+        <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Sort By:</span>
         <%= link_to "Name", tasks_path(sort: 'title', direction: 'asc', status: params[:status], per_page: @per_page), class: "text-xs font-bold #{params[:sort] == 'title' ? 'text-blue-600' : 'text-gray-500 hover:text-blue-500'}" %>
         <div class="w-1 h-1 bg-gray-200 rounded-full"></div>
         <%= link_to "Date", tasks_path(sort: 'due_date', direction: 'asc', status: params[:status], per_page: @per_page), class: "text-xs font-bold #{params[:sort] == 'due_date' ? 'text-blue-600' : 'text-gray-500 hover:text-blue-500'}" %>
@@ -43,7 +40,6 @@
     </div>
   </div>
 
-  <%# Tasks Grid %>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
     <% @tasks.each do |task| %>
       <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group">
@@ -55,12 +51,18 @@
             <% if task.due_date %>
               <div class="text-right">
                 <p class="text-[9px] font-black text-gray-300 uppercase tracking-tighter">Due Date</p>
-                <p class="text-[11px] font-bold text-gray-500"><%= task.due_date.strftime("%b %d, %Y") %></p>
+                <% is_overdue = task.due_date < Time.current && task.status != 'Done' %>
+                <p class="text-[11px] font-bold <%= is_overdue ? 'text-red-500 animate-pulse' : 'text-gray-500' %>">
+                  <%= task.due_date.strftime("%b %d, %Y") %>
+                  <% if is_overdue %>
+                    <span class="block text-[8px] uppercase tracking-tighter font-black">Overdue!</span>
+                  <% end %>
+                </p>
               </div>
             <% end %>
           </div>
           <h2 class="text-2xl font-black text-gray-900 mb-3 group-hover:text-blue-600 transition-colors"><%= task.title %></h2>
-          <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 mb-8 text-gray-400"><%= task.description %></p>
+          <p class="text-gray-400 text-sm leading-relaxed line-clamp-3 mb-8"><%= task.description %></p>
         </div>
         
         <div class="flex justify-between items-center pt-6 border-t border-gray-50">
@@ -78,7 +80,6 @@
     <% end %>
   </div>
 
-  <%# Advanced Data Table Pagination (The missing piece!) %>
   <div class="flex flex-col md:flex-row items-center justify-end gap-6 py-6 px-4 border-t border-gray-100 text-sm text-gray-600 font-medium bg-white rounded-b-[2.5rem] shadow-sm">
     <div class="flex items-center gap-3">
       <span class="text-gray-400">Rows per page:</span>
