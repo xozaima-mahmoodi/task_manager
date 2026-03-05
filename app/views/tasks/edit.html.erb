@@ -1,12 +1,33 @@
-<% content_for :title, "Editing task" %>
+<div class="min-h-screen bg-gray-50 py-12 px-4">
+  <div class="max-w-2xl mx-auto">
+    
+    <%# Header with Back Link %>
+    <div class="flex items-center gap-4 mb-8">
+      <%= link_to tasks_path, class: "p-2 rounded-xl bg-white border border-gray-200 text-gray-400 hover:text-blue-600 shadow-sm transition-all group" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      <% end %>
+      <div>
+        <h1 class="text-3xl font-black text-gray-900 tracking-tight">Edit Task</h1>
+        <p class="text-gray-500 text-sm font-medium">Update your task details below</p>
+      </div>
+    </div>
 
-<h1>Editing task</h1>
+    <%# Card Container %>
+    <div class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 p-8 md:p-10">
+      <%= render "form", task: @task %>
+      
+      <div class="mt-8 pt-6 border-t border-gray-50 flex justify-center">
+        <%= link_to @task, class: "text-xs font-bold text-gray-400 hover:text-blue-600 transition-colors flex items-center gap-1" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          Preview this task
+        <% end %>
+      </div>
+    </div>
 
-<%= render "form", task: @task %>
-
-<br>
-
-<div>
-  <%= link_to "Show this task", @task %> |
-  <%= link_to "Back to tasks", tasks_path %>
+  </div>
 </div>

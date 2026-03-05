@@ -5,15 +5,16 @@ class TasksController < ApplicationController
   def index
     sort_column = params[:sort] || 'created_at'
     sort_direction = params[:direction] || 'desc'
-
     allowed_columns = ['title', 'due_date', 'created_at', 'status']
     sort_column = 'created_at' unless allowed_columns.include?(sort_column)
 
-    @tasks = current_user.tasks.order("#{sort_column} #{sort_direction}")
-
-    @tasks = @tasks.where(status: params[:status]) if params[:status].present?
+    @per_page = params[:per_page].present? ? params[:per_page].to_i : 10
     
-    # Stats for dashboard
+    @tasks = current_user.tasks.order("#{sort_column} #{sort_direction}")
+    @tasks = @tasks.where(status: params[:status]) if params[:status].present?
+    @tasks = @tasks.where("title LIKE ?", "%#{params[:query]}%") if params[:query].present?
+    @tasks = @tasks.page(params[:page]).per(@per_page)
+
     @total_count = current_user.tasks.count
     @pending_count = current_user.tasks.where(status: 'Pending').count
     @in_progress_count = current_user.tasks.where(status: 'In Progress').count
@@ -54,11 +55,12 @@ class TasksController < ApplicationController
   end
 
   private
-    def set_task
-      @task = current_user.tasks.find(params[:id])
-    end
 
-    def task_params
-      params.require(:task).permit(:title, :description, :status, :due_date)
-    end
+  def set_task
+    @task = current_user.tasks.find(params[:id])
+  end
+
+  def task_params
+    params.require(:task).permit(:title, :description, :status, :due_date)
+  end
 end
