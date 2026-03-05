@@ -80,7 +80,8 @@
     <% end %>
   </div>
 
-  <div class="flex flex-col md:flex-row items-center justify-end gap-6 py-6 px-4 border-t border-gray-100 text-sm text-gray-600 font-medium bg-white rounded-b-[2.5rem] shadow-sm">
+  <%# Centered Data Table Pagination %>
+  <div class="flex flex-col md:flex-row items-center justify-center gap-8 py-6 px-4 border-t border-gray-100 text-sm text-gray-600 font-medium bg-white rounded-b-[2.5rem] shadow-sm">
     <div class="flex items-center gap-3">
       <span class="text-gray-400">Rows per page:</span>
       <div class="relative">
@@ -97,26 +98,26 @@
       </div>
     </div>
 
-    <div class="min-w-[100px] text-center text-gray-500">
+    <div class="min-w-[100px] text-center text-gray-500 font-bold border-x border-gray-50 px-6">
       <% start_idx = (@tasks.current_page - 1) * @tasks.limit_value + 1 %>
       <% end_idx = [start_idx + @tasks.length - 1, @total_count].min %>
-      <%= @total_count > 0 ? "#{start_idx}-#{end_idx}" : "0" %> of <%= @total_count %>
+      <%= @total_count > 0 ? "#{start_idx}-#{end_idx}" : "0" %> <span class="text-gray-300 mx-1">of</span> <%= @total_count %>
     </div>
 
     <div class="flex items-center gap-1">
-      <%= link_to tasks_path(page: 1, per_page: @per_page, status: params[:status], sort: params[:sort]), class: "p-2 rounded-lg transition-colors #{@tasks.first_page? ? 'text-gray-200 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}" do %>
+      <%= link_to tasks_path(page: 1, per_page: @per_page, status: params[:status], sort: params[:sort]), class: "p-2 rounded-lg transition-colors #{@tasks.first_page? ? 'text-gray-200 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'}" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
       <% end %>
 
-      <%= link_to tasks_path(page: @tasks.prev_page, per_page: @per_page, status: params[:status], sort: params[:sort]), class: "p-2 rounded-lg transition-colors #{!@tasks.prev_page ? 'text-gray-200 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}" do %>
+      <%= link_to tasks_path(page: @tasks.prev_page, per_page: @per_page, status: params[:status], sort: params[:sort]), class: "p-2 rounded-lg transition-colors #{!@tasks.prev_page ? 'text-gray-200 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'}" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
       <% end %>
 
-      <%= link_to tasks_path(page: @tasks.next_page, per_page: @per_page, status: params[:status], sort: params[:sort]), class: "p-2 rounded-lg transition-colors #{!@tasks.next_page ? 'text-gray-200 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}" do %>
+      <%= link_to tasks_path(page: @tasks.next_page, per_page: @per_page, status: params[:status], sort: params[:sort]), class: "p-2 rounded-lg transition-colors #{!@tasks.next_page ? 'text-gray-200 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'}" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
       <% end %>
 
-      <%= link_to tasks_path(page: @tasks.total_pages, per_page: @per_page, status: params[:status], sort: params[:sort]), class: "p-2 rounded-lg transition-colors #{@tasks.last_page? ? 'text-gray-200 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}" do %>
+      <%= link_to tasks_path(page: @tasks.total_pages, per_page: @per_page, status: params[:status], sort: params[:sort]), class: "p-2 rounded-lg transition-colors #{@tasks.last_page? ? 'text-gray-200 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'}" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
       <% end %>
     </div>
