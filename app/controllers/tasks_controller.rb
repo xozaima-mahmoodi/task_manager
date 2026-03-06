@@ -12,7 +12,12 @@ class TasksController < ApplicationController
     
     @tasks = current_user.tasks.order("#{sort_column} #{sort_direction}")
     @tasks = @tasks.where(status: params[:status]) if params[:status].present?
-    @tasks = @tasks.where("title LIKE ?", "%#{params[:query]}%") if params[:query].present?
+    
+    # Improved Search Logic
+    if params[:query].present?
+      @tasks = @tasks.where("title LIKE ?", "%#{params[:query]}%")
+    end
+
     @tasks = @tasks.page(params[:page]).per(@per_page)
 
     @total_count = current_user.tasks.count
@@ -21,11 +26,10 @@ class TasksController < ApplicationController
     @done_count = current_user.tasks.where(status: 'Done').count
   end
 
-  # New action for Quick Complete
   def toggle_status
     new_status = @task.status == 'Done' ? 'Pending' : 'Done'
     @task.update(status: new_status)
-    redirect_to tasks_path(page: params[:page], per_page: params[:per_page], status: params[:filter_status])
+    redirect_to tasks_path(page: params[:page], per_page: params[:per_page], status: params[:filter_status], query: params[:query])
   end
 
   def show
