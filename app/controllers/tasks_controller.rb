@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[ show edit update destroy ]
+  before_action :set_task, only: %i[ show edit update destroy toggle_status ]
   before_action :authenticate_user!
 
   def index
@@ -21,6 +21,13 @@ class TasksController < ApplicationController
     @done_count = current_user.tasks.where(status: 'Done').count
   end
 
+  # New action for Quick Complete
+  def toggle_status
+    new_status = @task.status == 'Done' ? 'Pending' : 'Done'
+    @task.update(status: new_status)
+    redirect_to tasks_path(page: params[:page], per_page: params[:per_page], status: params[:filter_status])
+  end
+
   def show
   end
 
@@ -33,7 +40,6 @@ class TasksController < ApplicationController
 
   def create
     @task = current_user.tasks.build(task_params)
-
     if @task.save
       redirect_to tasks_path, notice: "Task was successfully created."
     else
