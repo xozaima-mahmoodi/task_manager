@@ -1,29 +1,53 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
+  <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-[3rem] shadow-xl shadow-blue-500/5 border border-gray-100">
     <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
+      <div class="flex justify-center">
+        <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+          </svg>
+        </div>
+      </div>
+      <h2 class="mt-6 text-center text-3xl font-black text-gray-900 tracking-tight">Create Account</h2>
+      <p class="mt-2 text-center text-sm text-gray-500 font-medium">Start managing your tasks today</p>
     </div>
+
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mt-8 space-y-6" }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div class="rounded-md shadow-sm -space-y-px">
+      <div class="space-y-4">
         <div>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email address", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" %>
+          <%= f.label :email, class: "block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "your@email.com",
+              class: "appearance-none relative block w-full px-4 py-3 border border-gray-100 placeholder-gray-300 text-gray-900 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all sm:text-sm font-medium" %>
         </div>
+
         <div>
-          <%= f.password_field :password, autocomplete: "new-password", placeholder: "Password (6 chars min)", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" %>
+          <%= f.label :password, class: "block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1" %>
+          <% if @minimum_password_length %>
+            <span class="text-[9px] text-gray-300 lowercase">(<%= @minimum_password_length %> characters min)</span>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "new-password", placeholder: "••••••••",
+              class: "appearance-none relative block w-full px-4 py-3 border border-gray-100 placeholder-gray-300 text-gray-900 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all sm:text-sm font-medium" %>
         </div>
+
         <div>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Confirm Password", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" %>
+          <%= f.label :password_confirmation, class: "block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "••••••••",
+              class: "appearance-none relative block w-full px-4 py-3 border border-gray-100 placeholder-gray-300 text-gray-900 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all sm:text-sm font-medium" %>
         </div>
       </div>
 
       <div>
-        <%= f.submit "Sign up", class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+        <%= f.submit "Create Account", class: "group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-black rounded-2xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all shadow-lg shadow-blue-500/25" %>
       </div>
     <% end %>
-    <div class="text-center text-sm text-gray-600">
-      <%= render "devise/shared/links" %>
+
+    <div class="text-center pt-4">
+      <p class="text-xs text-gray-400 font-bold">
+        Already have an account? 
+        <%= link_to "Sign in instead", new_session_path(resource_name), class: "text-blue-600 hover:underline ml-1" %>
+      </p>
     </div>
   </div>
 </div>
